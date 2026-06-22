@@ -1,12 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.API", "src\Order.API\Order.API.csproj", "{E89028E7-CA02-4A7E-ABE5-F679AE6C3FE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.API", "src\OrderService.API\OrderService.API.csproj", "{E89028E7-CA02-4A7E-ABE5-F679AE6C3FE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Application", "src\Order.Application\Order.Application.csproj", "{ED81F20E-CC9F-4D41-A316-BF86EDDA54AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Application", "src\OrderService.Application\OrderService.Application.csproj", "{ED81F20E-CC9F-4D41-A316-BF86EDDA54AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Domain", "src\Order.Domain\Order.Domain.csproj", "{03D41776-D5B1-41C6-8796-2C1892B52690}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Domain", "src\OrderService.Domain\OrderService.Domain.csproj", "{03D41776-D5B1-41C6-8796-2C1892B52690}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.Infrastructure", "src\Order.Infrastructure\Order.Infrastructure.csproj", "{34F6C636-636C-4483-9B7F-EDA1F04A48BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService.Infrastructure", "src\OrderService.Infrastructure\OrderService.Infrastructure.csproj", "{34F6C636-636C-4483-9B7F-EDA1F04A48BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{025E79F9-FB6F-450F-9F86-D7F5F0712382}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{AB35BD97-ED8B-4F51-B5A9-DA8CD5B68AF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +34,11 @@ Global
 		{34F6C636-636C-4483-9B7F-EDA1F04A48BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34F6C636-636C-4483-9B7F-EDA1F04A48BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34F6C636-636C-4483-9B7F-EDA1F04A48BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E89028E7-CA02-4A7E-ABE5-F679AE6C3FE7} = {025E79F9-FB6F-450F-9F86-D7F5F0712382}
+		{ED81F20E-CC9F-4D41-A316-BF86EDDA54AF} = {025E79F9-FB6F-450F-9F86-D7F5F0712382}
+		{03D41776-D5B1-41C6-8796-2C1892B52690} = {025E79F9-FB6F-450F-9F86-D7F5F0712382}
+		{34F6C636-636C-4483-9B7F-EDA1F04A48BA} = {025E79F9-FB6F-450F-9F86-D7F5F0712382}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-﻿namespace Order.Domain.Common;
+﻿namespace OrderService.Domain.Common;
 
 public record Error
 {

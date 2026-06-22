@@ -1,7 +1,7 @@
-﻿using Order.Domain.Common;
-using Order.Domain.Errors;
+﻿using OrderService.Domain.Common;
+using OrderService.Domain.Errors;
 
-namespace Order.Domain.Entities;
+namespace OrderService.Domain.Entities;
 
 public class Order
 {

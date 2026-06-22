@@ -1,6 +1,6 @@
-﻿using Order.Domain.Common;
+﻿using OrderService.Domain.Common;
 
-namespace Order.Domain.Errors;
+namespace OrderService.Domain.Errors;
 
 public static class OrderErrors
 {
