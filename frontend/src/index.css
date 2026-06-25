@@ -1,0 +1,15 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #16171d;
+  color: #f3f4f6;
+  font-family: Inter, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}

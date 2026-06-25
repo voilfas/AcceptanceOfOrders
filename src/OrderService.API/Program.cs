@@ -4,7 +4,16 @@ using OrderService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("React",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddApplication();
 
@@ -27,7 +36,9 @@ app.UseSwagger();
 
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseCors("React");
 
 app.UseAuthorization();
 

@@ -16,13 +16,15 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
     
     public async Task<Result<string>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
+        var pickUpDateUtc = DateTime.SpecifyKind(request.PickUpDate, DateTimeKind.Utc);
+        
         var resultOrder = Order.Create(
             request.SenderCity,
             request.SenderAddress,
             request.ReceiverCity,
             request.ReceiverAddress,
             request.Weight,
-            request.PickUpDate);
+            pickUpDateUtc);
 
         if (resultOrder.IsFailure)
             return Result<string>.Failure(resultOrder.Error);
