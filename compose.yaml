@@ -14,6 +14,30 @@
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
+        
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d orderdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  
+  api:
+    build:
+      context: .
+      dockerfile: src/OrderService.API/Dockerfile
+      
+    container_name: orders-api
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+      
+    ports:
+      - "8080:8080"
+        
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__OrderDb: Host=postgres;Port=5432;Database=orderdb;Username=postgres;Password=postgres
+      
 volumes:
   postgres_data:
