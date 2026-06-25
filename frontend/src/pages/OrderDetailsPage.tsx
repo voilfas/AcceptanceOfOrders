@@ -1,13 +1,12 @@
-﻿import {Link, useParams} from "react-router-dom";
-import {getOrderById} from "../api/ordersApi.ts";
-import {useEffect, useState} from "react";
-import type {OrderDetails} from "../types/orderDetails.ts";
+﻿import { Link, useParams } from "react-router-dom";
+import { getOrderById } from "../api/ordersApi.ts";
+import { useEffect, useState } from "react";
+import type { OrderDetails } from "../types/orderDetails.ts";
+import "../styles/OrderDetailsPage.css";
 
 function OrderDetailsPage() {
     const { id } = useParams();
-
-    const [order, setOrder] =
-        useState<OrderDetails | null>(null);
+    const [order, setOrder] = useState<OrderDetails | null>(null);
 
     useEffect(() => {
         if (id) {
@@ -17,69 +16,88 @@ function OrderDetailsPage() {
 
     async function loadOrder(orderId: string) {
         const data = await getOrderById(orderId);
-
         setOrder(data);
     }
 
     if (!order) {
-        return <h2>Loading...</h2>;
+        return (
+            <div className="page-container">
+                <div className="details-card">
+                    <h2 className="loading-text">Loading...</h2>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="page-container">
+            <div className="details-card">
+                <h1 className="details-title">Order Details</h1>
 
-            <h1>Order Details</h1>
-            
-            <p>
-                <strong>Order Number:</strong>{" "}
-                {order.orderNumber}
-            </p>
+                <div className="details-grid">
+                    {/* 1. Order Number – полная ширина */}
+                    <div className="detail-item full-width">
+                        <span className="detail-label">Order Number</span>
+                        <span className="detail-value">{order.orderNumber}</span>
+                    </div>
 
-            <p>
-                <strong>Sender City:</strong>{" "}
-                {order.senderCity}
-            </p>
+                    {/* 2. Sender City – левая колонка */}
+                    <div className="detail-item">
+                        <span className="detail-label">Sender City</span>
+                        <span className="detail-value">{order.senderCity}</span>
+                    </div>
 
-            <p>
-                <strong>Sender Address:</strong>{" "}
-                {order.senderAddress}
-            </p>
+                    {/* 3. Sender Address – правая колонка */}
+                    <div className="detail-item">
+                        <span className="detail-label">Sender Address</span>
+                        <span className="detail-value">{order.senderAddress}</span>
+                    </div>
 
-            <p>
-                <strong>Receiver City:</strong>{" "}
-                {order.receiverCity}
-            </p>
+                    {/* 4. Receiver City – левая колонка (новая строка) */}
+                    <div className="detail-item">
+                        <span className="detail-label">Receiver City</span>
+                        <span className="detail-value">{order.receiverCity}</span>
+                    </div>
 
-            <p>
-                <strong>Receiver Address:</strong>{" "}
-                {order.receiverAddress}
-            </p>
+                    {/* 5. Receiver Address – правая колонка */}
+                    <div className="detail-item">
+                        <span className="detail-label">Receiver Address</span>
+                        <span className="detail-value">{order.receiverAddress}</span>
+                    </div>
 
-            <p>
-                <strong>Weight:</strong>{" "}
-                {order.weight} kg
-            </p>
+                    {/* 6. Weight – полная ширина */}
+                    <div className="detail-item full-width">
+                        <span className="detail-label">Weight</span>
+                        <span className="detail-value">{order.weight} kg</span>
+                    </div>
 
-            <p>
-                <strong>Pickup Date:</strong>{" "}
-                {new Date(order.pickUpDate)
-                    .toLocaleString()}
-            </p>
+                    {/* 7. Pickup Date – полная ширина */}
+                    <div className="detail-item full-width">
+                        <span className="detail-label">Pickup Date</span>
+                        <span className="detail-value">
+                            {new Date(order.pickUpDate).toLocaleString()}
+                        </span>
+                    </div>
 
-            <p>
-                <strong>Created At:</strong>{" "}
-                {new Date(order.createdAt)
-                    .toLocaleString()}
-            </p>
+                    {/* 8. Created At – левая колонка */}
+                    <div className="detail-item">
+                        <span className="detail-label">Created At</span>
+                        <span className="detail-value">
+                            {new Date(order.createdAt).toLocaleString()}
+                        </span>
+                    </div>
 
-            <p>
-                <strong>Order ID:</strong>{" "}
-                {order.id}
-            </p>
+                    {/* 9. Order ID – правая колонка (с моноширинным шрифтом) */}
+                    <div className="detail-item">
+                        <span className="detail-label">Order ID</span>
+                        <span className="detail-value mono">{order.id}</span>
+                    </div>
+                </div>
 
-            <Link to="/" style={{ marginTop: "30px", display: "inline-block" }}>
-                ← Back to Orders
-            </Link>
+                <Link to="/" className="back-link">
+                    ← Back to Orders
+                </Link>
+            </div>
         </div>
     );
 }

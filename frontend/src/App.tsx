@@ -1,5 +1,4 @@
 import OrdersPage from "./pages/OrdersPage.tsx";
-import './App.css'
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import CreateOrderPage from "./pages/CreateOrderPage.tsx";
 import OrderDetailsPage from "./pages/OrderDetailsPage.tsx";

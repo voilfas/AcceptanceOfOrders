@@ -1,10 +1,10 @@
 ﻿import type {Order} from "../types/order.ts";
 import {useEffect, useState} from "react";
 import {getOrders} from "../api/ordersApi.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import "../styles/OrdersPage.css";
 
 function OrdersPage() {
-    const navigate = useNavigate();
     
     const [orders, setOrders] = useState<Order[]>([]);
     
@@ -16,49 +16,70 @@ function OrdersPage() {
         const data = await getOrders();
         setOrders(data);
     }
-    
-    
+
+
     return (
-        <div style={{ padding: "20px" }}>
-            <h1>Orders List</h1>
+        <div className="orders-page">
 
-            <Link to="/orders/create">
-                <button>Create Order</button>
-            </Link>
+            <div className="page-header">
 
-            <table
-                border={1}
-                cellPadding={10}
-                style={{
-                    marginTop: "20px",
-                    width: "100%",
-                    borderCollapse: "collapse"
-                }}
-            >
-                <thead>
-                <tr>
-                    <th>Order Number</th>
-                    <th>Sender City</th>
-                    <th>Receiver City</th>
-                    <th>Weight</th>
-                </tr>
-                </thead>
+                <h1 className="page-title">
+                    Orders
+                </h1>
 
-                <tbody>
+                <Link
+                    to="/orders/create"
+                    className="create-button"
+                >
+                    + Create Order
+                </Link>
+
+            </div>
+
+            <div className="orders-grid">
+
                 {orders.map(order => (
-                    <tr
+
+                    <div
                         key={order.orderId}
-                        onClick={() => navigate(`/orders/${order.orderId}`)}
-                        style={{ cursor: "pointer" }}
+                        className="order-card"
                     >
-                        <td>{order.orderNumber}</td>
-                        <td>{order.senderCity}</td>
-                        <td>{order.receiverCity}</td>
-                        <td>{order.weight}</td>
-                    </tr>
+
+                        <div className="order-number">
+                            {order.orderNumber}
+                        </div>
+
+                        <div className="order-route">
+                            📦 {order.senderCity}
+                            {" → "}
+                            {order.receiverCity}
+                        </div>
+
+                        <div className="order-info">
+                            Weight: {order.weight} kg
+                        </div>
+
+                        <div className="order-info">
+                            Pickup:
+                            {" "}
+                            {new Date(
+                                order.pickUpDate
+                            ).toLocaleString()}
+                        </div>
+
+                        <Link
+                            to={`/orders/${order.orderId}`}
+                            className="details-link"
+                        >
+                            View Details →
+                        </Link>
+
+                    </div>
+
                 ))}
-                </tbody>
-            </table>
+
+            </div>
+
         </div>
     );
 }
