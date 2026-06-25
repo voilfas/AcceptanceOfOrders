@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using OrderService.Application;
 using OrderService.Infrastructure;
 
@@ -15,6 +16,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<OrderDbContext>();
+
+    dbContext.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
