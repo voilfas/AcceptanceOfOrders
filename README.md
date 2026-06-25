@@ -1,6 +1,11 @@
+![.NET](https://img.shields.io/badge/.NET-9.0-purple)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue)
+![Docker](https://img.shields.io/badge/Docker-Compose-blue)
+![Tests](https://img.shields.io/badge/xUnit-Tests-green)
+
 # Order Delivery Management System
 
-A simple order delivery management system built as a test assignment using ASP.NET 9, React, Entity Framework Core and Clean Architecture.
+A delivery order management system developed as a test assignment using **ASP.NET 9**, **Entity Framework Core**, **PostgreSQL**, **MediatR**, and **Clean Architecture** principles.
 
 ---
 
@@ -14,55 +19,70 @@ Create a new delivery order with:
 * Sender address
 * Receiver city
 * Receiver address
-* Weight
-* Pickup date
-
-### Orders List
-
-View all created orders including:
-
-* Order number
-* Sender information
-* Receiver information
 * Cargo weight
 * Pickup date
 
-### Order Details
+Each order receives an automatically generated order number.
 
-View a single order in read-only mode.
+### Get Order By Id
+
+Retrieve a specific order by its identifier.
+
+### Get Orders
+
+Retrieve all created orders.
+
+### Domain Validation
+
+The system validates:
+
+* City names
+* Addresses
+* Cargo weight
+* Pickup date
+
+All business rules are enforced within the Domain Layer.
 
 ---
 
 ## Architecture
 
+### Request Flow
+
 ```text
-┌─────────────────┐
-│     React UI    │
-└────────┬────────┘
-         │ HTTP
-         ▼
-┌─────────────────┐
-│    ASP.NET API  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Application    │
-│ Business Logic  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│     Domain      │
-│ Entities &      │
-│ Validation      │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│ Infrastructure  │
-│ EF Core + DB    │
-└─────────────────┘
+Client
+   │
+   ▼
+OrdersController
+   │
+   ▼
+MediatR
+   │
+   ▼
+Command / Query Handler
+   │
+   ▼
+Repository
+   │
+   ▼
+Entity Framework Core
+   │
+   ▼
+PostgreSQL
+```
+
+### Clean Architecture
+
+```text
+┌─────────────────────────────┐
+│          API Layer          │
+├─────────────────────────────┤
+│      Application Layer      │
+├─────────────────────────────┤
+│         Domain Layer        │
+├─────────────────────────────┤
+│    Infrastructure Layer     │
+└─────────────────────────────┘
 ```
 
 ---
@@ -71,50 +91,47 @@ View a single order in read-only mode.
 
 ```text
 src/
-├── Order.API
-├── Order.Application
-├── Order.Domain
-└── Order.Infrastructure
+├── OrderService.API
+├── OrderService.Application
+├── OrderService.Domain
+└── OrderService.Infrastructure
 
 tests/
-└── Order.Domain.Tests
+└── OrderService.Domain.Tests
 ```
 
 ---
 
-## Technologies
+## Technology Stack
 
 ### Backend
 
 * ASP.NET 9
 * Entity Framework Core
+* MediatR
+* PostgreSQL
+* Swagger/OpenAPI
+* CQRS
 * Clean Architecture
 * Result Pattern
-
-### Frontend
-
-* React
-* TypeScript
-
-### Database
-
-* PostgreSQL
 
 ### Testing
 
 * xUnit
 * FluentAssertions
 
+### Infrastructure
+
+* Docker
+* Docker Compose
+
 ---
 
-## Domain Validation
+## Design Decisions
 
-The domain layer validates:
+### Result Pattern
 
-* City names
-* Addresses
-* Cargo weight
-* Pickup date
+Business validation errors are handled using a custom Result Pattern instead of exceptions.
 
 Example:
 
@@ -126,69 +143,166 @@ var result = Order.Create(
     receiverAddress,
     weight,
     pickupDate);
+
+if (result.IsFailure)
+{
+    return result.Error;
+}
+```
+
+### CQRS + MediatR
+
+Commands and queries are separated using MediatR.
+
+```text
+Controller
+    ↓
+MediatR
+    ↓
+Handler
+    ↓
+Repository
+    ↓
+Database
 ```
 
 ---
 
-## Getting Started
+## Running the Application
 
-### Clone repository
+### Prerequisites
+
+* Docker Desktop
+
+No local PostgreSQL installation is required.
+
+---
+
+### Start Application
 
 ```bash
-git clone <repository-url>
+docker compose up --build
 ```
 
-### Backend
+The application will:
 
-```bash
-cd src/Order.API
+* Start PostgreSQL
+* Start ASP.NET API
+* Apply Entity Framework migrations automatically
+* Expose Swagger UI
 
-dotnet restore
+---
 
-dotnet ef database update
+## Swagger
 
-dotnet run
-```
-
-API will be available at:
+Available at:
 
 ```text
-https://localhost:5001
-```
-
-### Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
-
-Frontend will be available at:
-
-```text
-http://localhost:5173
+http://localhost:8080/swagger
 ```
 
 ---
 
-## Running Tests
+## API Endpoints
+
+### Create Order
+
+```http
+POST /api/orders
+```
+
+Request example:
+
+```json
+{
+  "senderCity": "Moscow",
+  "senderAddress": "Lenina 1",
+  "receiverCity": "Saint Petersburg",
+  "receiverAddress": "Nevsky 10",
+  "weight": 100.5,
+  "pickUpDate": "2026-01-01T12:00:00Z"
+}
+```
+
+Response:
+
+```json
+"ORD-250626-ABC123"
+```
+
+---
+
+### Get Order By Id
+
+```http
+GET /api/orders/{id}
+```
+
+---
+
+### Get All Orders
+
+```http
+GET /api/orders
+```
+
+---
+
+## Error Handling
+
+The API uses a custom Result Pattern together with centralized error mapping.
+
+Examples:
+
+| Error            | Status Code               |
+| ---------------- | ------------------------- |
+| Validation Error | 400 Bad Request           |
+| Order Not Found  | 404 Not Found             |
+| Unexpected Error | 500 Internal Server Error |
+
+---
+
+## Testing
+
+Run all tests:
 
 ```bash
 dotnet test
 ```
 
+Covered scenarios:
+
+* Successful order creation
+* Invalid city validation
+* Invalid address validation
+* Invalid weight validation
+* Invalid pickup date validation
+
 ---
 
-## Future Improvements
+## Current Status
 
-* Docker support
-* Integration tests
-* Swagger authentication
+### Completed
+
+* Domain Layer
+* Application Layer
+* Infrastructure Layer
+* API Layer
 * CQRS with MediatR
-* Order status tracking
+* PostgreSQL Integration
+* Entity Framework Core
+* Docker Compose Support
+* Automatic Database Migrations
+* Swagger Documentation
+* Unit Tests
+
+### Planned
+
+* React Frontend
+* Integration Tests
+* Pagination
+* Filtering
+* Order Status Tracking
 
 ---
 
