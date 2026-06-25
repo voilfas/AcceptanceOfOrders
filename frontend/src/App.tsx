@@ -1,16 +1,26 @@
-/*import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'*/
 import OrdersPage from "./pages/OrdersPage.tsx";
 import './App.css'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import CreateOrderPage from "./pages/CreateOrderPage.tsx";
+import OrderDetailsPage from "./pages/OrderDetailsPage.tsx";
 
 function App(){
   return (
-      <>
-          <h1>Order Delivery Management System</h1>
-          <OrdersPage />
-      </>
+      <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<OrdersPage />} />
+
+              <Route
+                  path="/orders/create"
+                  element={<CreateOrderPage />}
+              />
+
+              <Route
+                  path="/orders/:id"
+                  element={<OrderDetailsPage />}
+              />
+          </Routes>
+      </BrowserRouter>
   );
 }
 
