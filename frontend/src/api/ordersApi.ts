@@ -1,7 +1,6 @@
 ﻿import axios from "axios";
 import type {Order} from "../types/order.ts";
 import type {OrderDetails} from "../types/orderDetails.ts";
-import type {CreateOrder} from "../types/createOrder.ts";
 
 export const api = axios.create({
     baseURL: "http://localhost:8080/api"
