@@ -1,77 +1,137 @@
-![.NET](https://img.shields.io/badge/.NET-9.0-purple)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue)
-![Docker](https://img.shields.io/badge/Docker-Compose-blue)
-![Tests](https://img.shields.io/badge/xUnit-Tests-green)
-
 # Order Delivery Management System
 
-A delivery order management system developed as a test assignment using **ASP.NET 9**, **Entity Framework Core**, **PostgreSQL**, **MediatR**, and **Clean Architecture** principles.
+![.NET](https://img.shields.io/badge/.NET-9.0-purple)
+![React](https://img.shields.io/badge/React-19-61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-blue)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
+![Tests](https://img.shields.io/badge/xUnit-Tests-green)
+
+A full-stack delivery order management system developed as a test assignment.
+
+The project demonstrates modern **ASP.NET 9** backend development using **Clean Architecture**, **CQRS**, **MediatR**, **Entity Framework Core**, **PostgreSQL**, **React**, **TypeScript**, and **Docker Compose**.
 
 ---
 
-## Features
+# Project Status
 
-### Create Order
+* ✅ Backend completed
+* ✅ Frontend completed
+* ✅ Dockerized
+* ✅ Automatic Entity Framework Core migrations
+* ✅ Unit tests
+* ✅ Ready to run with a single command
 
-Create a new delivery order with:
+```bash
+docker compose up --build
+```
 
-* Sender city
-* Sender address
-* Receiver city
-* Receiver address
-* Cargo weight
-* Pickup date
+---
+# Screenshots
 
-Each order receives an automatically generated order number.
+## Orders List
 
-### Get Order By Id
-
-Retrieve a specific order by its identifier.
-
-### Get Orders
-
-Retrieve all created orders.
-
-### Domain Validation
-
-The system validates:
-
-* City names
-* Addresses
-* Cargo weight
-* Pickup date
-
-All business rules are enforced within the Domain Layer.
+![Orders List](docs/orders-page.png)
 
 ---
 
-## Architecture
+## Create Order
 
-### Request Flow
+![Create Order](docs/create-order-page.png)
+
+---
+
+## Order Details
+
+![Order Details](docs/order-details-page.png)
+
+---
+
+## Swagger
+
+![Swagger](docs/swagger.png)
+
+---
+
+
+
+# System Overview
+
+```text
+                 Docker Compose
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+        ▼                             ▼
+React + TypeScript              ASP.NET 9 Web API
+        │                             │
+        └──────────────┬──────────────┘
+                       │ HTTP
+                       ▼
+                  MediatR (CQRS)
+                       │
+                       ▼
+               Application Layer
+                       │
+                       ▼
+                  Domain Layer
+                       │
+                       ▼
+             Infrastructure Layer
+                       │
+                       ▼
+           Entity Framework Core
+                       │
+                       ▼
+                  PostgreSQL 17
+```
+
+---
+
+# Features
+
+* Create delivery orders
+* View all orders
+* View detailed order information
+* Domain validation
+* CQRS with MediatR
+* Swagger API documentation
+* Automatic database migrations
+* Docker Compose support
+* Responsive React frontend
+
+---
+
+
+# Architecture
+
+## Request Flow
 
 ```text
 Client
-   │
-   ▼
+    │
+    ▼
 OrdersController
-   │
-   ▼
+    │
+    ▼
 MediatR
-   │
-   ▼
+    │
+    ▼
 Command / Query Handler
-   │
-   ▼
+    │
+    ▼
 Repository
-   │
-   ▼
+    │
+    ▼
 Entity Framework Core
-   │
-   ▼
+    │
+    ▼
 PostgreSQL
 ```
 
-### Clean Architecture
+---
+
+## Clean Architecture
 
 ```text
 ┌─────────────────────────────┐
@@ -87,53 +147,68 @@ PostgreSQL
 
 ---
 
-## Solution Structure
+# Solution Structure
 
 ```text
-src/
-├── OrderService.API
-├── OrderService.Application
-├── OrderService.Domain
-└── OrderService.Infrastructure
-
-tests/
-└── OrderService.Domain.Tests
+.
+├── frontend
+│   ├── src
+│   └── Dockerfile
+│
+├── src
+│   ├── OrderService.API
+│   ├── OrderService.Application
+│   ├── OrderService.Domain
+│   └── OrderService.Infrastructure
+│
+├── tests
+│   └── OrderService.Domain.Tests
+│
+├── compose.yaml
+├── README.md
+└── docs
 ```
 
 ---
 
-## Technology Stack
+# Technology Stack
 
-### Backend
+## Backend
 
 * ASP.NET 9
 * Entity Framework Core
-* MediatR
 * PostgreSQL
-* Swagger/OpenAPI
+* MediatR
 * CQRS
 * Clean Architecture
 * Result Pattern
+* Swagger / OpenAPI
 
-### Testing
+## Frontend
+
+* React
+* TypeScript
+* Axios
+* React Router
+
+## Infrastructure
+
+* Docker
+* Docker Compose
+* Nginx
+
+## Testing
 
 * xUnit
 * FluentAssertions
 
-### Infrastructure
-
-* Docker
-* Docker Compose
-
 ---
 
-## Design Decisions
+# Design Decisions
 
-### Result Pattern
+## Result Pattern
 
 Business validation errors are handled using a custom Result Pattern instead of exceptions.
-
-Example:
 
 ```csharp
 var result = Order.Create(
@@ -150,7 +225,9 @@ if (result.IsFailure)
 }
 ```
 
-### CQRS + MediatR
+---
+
+## CQRS + MediatR
 
 Commands and queries are separated using MediatR.
 
@@ -168,93 +245,57 @@ Database
 
 ---
 
-## Running the Application
+# Running the Application
 
-### Prerequisites
+## Prerequisites
 
 * Docker Desktop
 
-No local PostgreSQL installation is required.
+No local installation of PostgreSQL, .NET SDK, or Node.js is required.
 
 ---
 
-### Start Application
+## Start the application
 
 ```bash
 docker compose up --build
 ```
 
-The application will:
+Docker Compose automatically:
 
-* Start PostgreSQL
-* Start ASP.NET API
-* Apply Entity Framework migrations automatically
-* Expose Swagger UI
-
----
-
-## Swagger
-
-Available at:
-
-```text
-http://localhost:8080/swagger
-```
+* Starts PostgreSQL
+* Starts ASP.NET Web API
+* Starts the React frontend
+* Applies Entity Framework Core migrations
+* Serves the application
 
 ---
 
-## API Endpoints
+# Application URLs
 
-### Create Order
+| Service  | URL                              |
+| -------- | -------------------------------- |
+| Frontend | http://localhost:5173            |
+| Swagger  | http://localhost:8080/swagger    |
 
-```http
-POST /api/orders
-```
-
-Request example:
-
-```json
-{
-  "senderCity": "Moscow",
-  "senderAddress": "Lenina 1",
-  "receiverCity": "Saint Petersburg",
-  "receiverAddress": "Nevsky 10",
-  "weight": 100.5,
-  "pickUpDate": "2026-01-01T12:00:00Z"
-}
-```
-
-Response:
-
-```json
-"ORD-250626-ABC123"
-```
 
 ---
 
-### Get Order By Id
+# API Endpoints
 
-```http
-GET /api/orders/{id}
-```
-
----
-
-### Get All Orders
-
-```http
-GET /api/orders
-```
+| Method | Endpoint         | Description     |
+| ------ | ---------------- | --------------- |
+| POST   | /api/orders      | Create Order    |
+| GET    | /api/orders      | Get All Orders  |
+| GET    | /api/orders/{id} | Get Order By Id |
 
 ---
 
-## Error Handling
+# Error Handling
 
 The API uses a custom Result Pattern together with centralized error mapping.
 
-Examples:
-
-| Error            | Status Code               |
+| Error            | HTTP Status               |
 | ---------------- | ------------------------- |
 | Validation Error | 400 Bad Request           |
 | Order Not Found  | 404 Not Found             |
@@ -262,7 +303,7 @@ Examples:
 
 ---
 
-## Testing
+# Testing
 
 Run all tests:
 
@@ -270,7 +311,7 @@ Run all tests:
 dotnet test
 ```
 
-Covered scenarios:
+Current unit tests cover:
 
 * Successful order creation
 * Invalid city validation
@@ -280,32 +321,16 @@ Covered scenarios:
 
 ---
 
-## Current Status
+# Future Improvements
 
-### Completed
-
-* Domain Layer
-* Application Layer
-* Infrastructure Layer
-* API Layer
-* CQRS with MediatR
-* PostgreSQL Integration
-* Entity Framework Core
-* Docker Compose Support
-* Automatic Database Migrations
-* Swagger Documentation
-* Unit Tests
-
-### Planned
-
-* React Frontend
 * Integration Tests
 * Pagination
 * Filtering
 * Order Status Tracking
+* Authentication & Authorization
 
 ---
 
-## Author
+# Author
 
 Developed as a test assignment.
